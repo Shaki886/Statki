@@ -1,0 +1,6 @@
+C:\Statki - gra\GraWStatki\GraWStatki\bin\Debug\GraWStatki.exe.config
+C:\Statki - gra\GraWStatki\GraWStatki\obj\Debug\GraWStatki.csprojResolveAssemblyReference.cache
+C:\Statki - gra\GraWStatki\GraWStatki\bin\Debug\GraWStatki.exe
+C:\Statki - gra\GraWStatki\GraWStatki\bin\Debug\GraWStatki.pdb
+C:\Statki - gra\GraWStatki\GraWStatki\obj\Debug\GraWStatki.exe
+C:\Statki - gra\GraWStatki\GraWStatki\obj\Debug\GraWStatki.pdb
