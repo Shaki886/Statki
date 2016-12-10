@@ -25,7 +25,20 @@ namespace GraWStatki
                 }
             }
         }
-        
+
+        public char[,] PlanszaCPU()
+        {
+            return planszaCPU;
+        }
+        public char[,] PlanszaCzlowieka()
+        {
+            return planszaCzlowieka;
+        }
+        public int[,] PlanszaTestowa()
+        {
+            return test_tab;
+        }
+
 
         public int IloscTrafien()
         {
@@ -37,10 +50,7 @@ namespace GraWStatki
     }
     class Osoba : Gracz
     {
-        public char[,] AktualnaPlansza()
-        {
-            return planszaCzlowieka;
-        }
+
         public void Ruch()
         {
             Console.WriteLine("Podaj wspolrzedna X:");
@@ -77,10 +87,12 @@ namespace GraWStatki
                 }
                 else
                 {
-                    planszaCPU[x, y] = 'P';
+                    planszaCPU[x, y] = 'X';
                     Console.Clear();
                     Console.WriteLine("Pudlo!\r\n");
+                    Console.WriteLine(planszaCPU[x, y]);
                 }
+
             }
             catch
             {
@@ -88,9 +100,9 @@ namespace GraWStatki
                 Console.WriteLine("Podawaj liczby tylko od 0 do 9");
             }
         }
-        private void UstawPole(int j, int w) //funkcja ustawienia statku
+        private void UstawPole(int x, int y) //funkcja ustawienia statku
         {
-            planszaCzlowieka[j, w] = 'S';
+            planszaCzlowieka[x, y] = 'S';
         }
         public void Ustawianie(int dlugosc)
         {
@@ -106,15 +118,15 @@ namespace GraWStatki
                 UstawPole(wspolrzedna_x, wspolrzedna_y);
                 for (int i = 0; i < dlugosc; i++)
                 {
-                    UstawPole(wspolrzedna_x, wspolrzedna_y + i);
+                    UstawPole(wspolrzedna_x+i, wspolrzedna_y);
                 }
             }
-            if (kierunek == "poziomowo" || kierunek == "Poziomowo")
+            if (kierunek == "poziomo" || kierunek == "Poziomo")
             {
                 UstawPole(wspolrzedna_x, wspolrzedna_y);
                 for (int i = 0; i < dlugosc; i++)
                 {
-                    UstawPole(wspolrzedna_x + i, wspolrzedna_y);
+                    UstawPole(wspolrzedna_x, wspolrzedna_y+i);
                 }
             }
             else
@@ -126,10 +138,11 @@ namespace GraWStatki
     }
     class CPU:Gracz
     {
-        public char[,] AktualnaPlansza()
+        public CPU()
         {
-            return planszaCPU;
+
         }
+
         private void UstawStatekPionowo(int x, int y, int dlugosc) //funkcja ustawienia statku
         {
             for (int i=0; i < dlugosc; i++)
@@ -147,62 +160,103 @@ namespace GraWStatki
         }
         public void UstawCPU(int dlugosc)
         {
+            int wyjdz = 0;
             int test_ok = 0;
+            Random r = new Random();
+
             do
             {
-                Random r = new Random();
-                int x_cpu = r.Next(0, 10);
-                int y_cpu = r.Next(0, 10);
-                int kierunek = r.Next(0, 10);
 
-                
+                int x_cpu = r.Next(0, 8);
+                int y_cpu = r.Next(0, 8);
+                int kierunek = r.Next(0, 2);
+
                 if (kierunek == 0)              //pionowo po y
                 {
-                    for (int i=0; i < dlugosc; i++)
+                    for (int i = 1; i <= dlugosc; i++)
                     {
-                        if (test_tab[x_cpu, y_cpu + i] == 0 && y_cpu<8)
+                        try
                         {
-                            test_ok += 1;
-                            if(test_ok==dlugosc)
+                            if (test_tab[x_cpu+1, y_cpu + i] == 0 
+                                && y_cpu + i < 8)
                             {
-                                UstawStatekPionowo(x_cpu, y_cpu, dlugosc);
-                                mapa_miejsc(x_cpu + 1, y_cpu + 1, dlugosc, kierunek);
-                            }
-                        }  //sprawdzamy czy jest wystarczajaco duzo miejsca, jesli tak to kladziemy tam statek i blokujemy pola
-                        else { test_ok = 0; }
-                    }
+                                test_ok += 1;
+                                //Console.WriteLine("test_ok= " + test_ok + " x= " + x_cpu + " y= " + y_cpu + " dla dlugosc= " + dlugosc + " test_tab= " + test_tab[x_cpu+1,y_cpu+1]);  test
+                                if (test_ok == dlugosc)
+                                {
+                                    UstawStatekPionowo(x_cpu, y_cpu, dlugosc);
+                                    mapa_miejsc(x_cpu + 1, y_cpu + 1, dlugosc, kierunek);
+                                    test_ok = 0;
+                                    wyjdz = 1;
+
+                                }
+                            }  //sprawdzamy czy jest wystarczajaco duzo miejsca, jesli tak to kladziemy tam statek i blokujemy pola
+                            if(test_tab[x_cpu + 1, y_cpu + i] == 1)
+                            { test_ok = 0; }
+                        }
+                        catch { }
+                     }
                 }
 
                 if (kierunek == 1)              //poziomo po x
                 {
-                    for (int i = 0; i < dlugosc; i++)
+                    for (int i = 1; i <= dlugosc; i++)
                     {
-                        if (test_tab[x_cpu+1, y_cpu] == 0 && x_cpu<8)
+                        try
                         {
-                            test_ok += 1;
-                            if (test_ok == dlugosc)
+                            if (test_tab[x_cpu + i, y_cpu+1] == 0 && x_cpu + i < 8)
                             {
-                                UstawStatekPoziomo(x_cpu, y_cpu, dlugosc);
-                                mapa_miejsc(x_cpu + 1, y_cpu + 1, dlugosc, kierunek);
+                                test_ok += 1;
+                                Console.WriteLine("test_ok= " + test_ok + " x= " + x_cpu + " y= " + y_cpu + " dla dlugosc= " + dlugosc + " test_tab= " + test_tab[x_cpu, y_cpu] + " text_tab[x+i-1,y] " + test_tab[x_cpu + i, y_cpu]);
+                                if (test_ok == dlugosc)
+                                {
+                                    UstawStatekPoziomo(x_cpu, y_cpu, dlugosc);
+                                    mapa_miejsc(x_cpu + 1, y_cpu + 1, dlugosc, kierunek);
+                                    test_ok = 0;
+                                    wyjdz = 1;
+                                }
+                            }  //sprawdzamy czy jest wystarczajaco duzo miejsca, jesli tak to kladziemy tam statek
+                            if (test_tab[x_cpu + i, y_cpu + 1] == 1)
+                            {
+                                test_ok = 0;
                             }
-                        }  //sprawdzamy czy jest wystarczajaco duzo miejsca, jesli tak to kladziemy tam statek
-                        else { test_ok = 0; }
+                        }
+                        catch { }
                     }
                 }
-            } while (test_ok < dlugosc); //jesli tak to wychodzimy z petli
-        }
+            } while (wyjdz != 1); //jesli tak to wychodzimy z petli
 
-        private void mapa_miejsc(int x, int y, int dlugosc, int kierunek)
+
+
+
+        }
+        public void test()
+        {
+            Console.WriteLine("\nPole test");
+            Console.WriteLine("X-> ¦ 0 1 2 3 4 5 6 7 8 9 ");
+            Console.WriteLine("--------------------------\nY:");
+            for (int i = 1; i <= 10; i++)
+            {
+                Console.Write("   " + (i-1).ToString() + "¦ ");
+                for (int j = 1; j <= 10; j++)
+                {
+                    Console.Write(test_tab[i, j] + " ");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("\n");
+        }
+        public void mapa_miejsc(int x, int y, int dlugosc, int kierunek)
         {
             if (kierunek == 0)
             {
                 for(int i=0; i<dlugosc; i++)
                 {
-                    test_tab[x, y+i] = 1;
-                    test_tab[x-1, y+i] = 1;
-                    test_tab[x+1, y+i] = 1;
-                    test_tab[x, y-1+i] = 1;
-                    test_tab[x, y+1+i] = 1;
+                    test_tab[x      , y     +i]      = 1;
+                    test_tab[x-1    , y     +i]      = 1;
+                    test_tab[x+1    , y     +i]      = 1;
+                    test_tab[x      , y-1   +i]      = 1;
+                    test_tab[x      , y+1   +i]      = 1;
                 }
             }
 

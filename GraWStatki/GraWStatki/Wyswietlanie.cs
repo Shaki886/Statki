@@ -12,30 +12,30 @@ namespace GraWStatki
         {
 
             Console.WriteLine("Pole gracza");
-            Console.WriteLine("X-> ¦ 0 1 2 3 4 5 6 7 8 9");
-            Console.WriteLine("--------------------------\nY:");
+            Console.WriteLine("Y-> ¦ 0 1 2 3 4 5 6 7 8 9");
+            Console.WriteLine("--------------------------\nX:");
             for (int i = 0; i <= 9; i++)
             {
                 Console.Write("   " + (i).ToString() + "¦ ");
                 for (int j = 0; j <= 9; j++)
                 {
-                    Console.Write(plansza[i,j] + " ");
+                    Console.Write(plansza[i,j] + "I");
                 }
                 Console.WriteLine();
             }
 
         }
-        public void WyswietlPlansze2(char[,] plansza)
+        public void WyswietlPlansze2(char[,] planszaCPU)
         {
             Console.WriteLine("Pole komputera");
-            Console.WriteLine("X-> ¦ 0 1 2 3 4 5 6 7 8 9");
-            Console.WriteLine("--------------------------\nY:");
+            Console.WriteLine("Y-> ¦ 0 1 2 3 4 5 6 7 8 9");
+            Console.WriteLine("--------------------------\nX:");
             for (int i = 0; i <= 9; i++)
             {
                 Console.Write("   " + (i).ToString() + "¦ ");
                 for (int j = 0; j <= 9; j++)
                 {
-                    Console.Write(plansza[i, j] + " ");
+                    Console.Write(planszaCPU[i, j] + " ");
                 }
                 Console.WriteLine();
             }
